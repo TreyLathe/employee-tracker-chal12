@@ -6,13 +6,20 @@ const inquirer = require("inquirer");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+//.createConnection() method to create a connection to the database.
+mysql;
+require("dotenv").config(); // Load environment variables from .env file
+
+const connectionConfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+};
+
 mysql
-  .createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "employees_db",
-  })
+  .createConnection(connectionConfig)
+  // .then method to handle the promise returned from createConnection()
   .then((connection) => {
     db = connection;
     console.log(`Connected to employees_db database.`);
@@ -24,6 +31,7 @@ mysql
   });
 
 const start = () => {
+  // Use inquirer.prompt() method to prompt the user with a list of options.
   inquirer
     .prompt({
       name: "action",
@@ -40,7 +48,9 @@ const start = () => {
         "Exit",
       ],
     })
+    // .then method to handle the promise returned from inquirer.prompt()
     .then((answer) => {
+      // Use a switch statement to call the appropriate function depending on what the user chooses.
       switch (answer.action) {
         case "View all departments":
           viewAllDepartments();
@@ -73,7 +83,7 @@ const start = () => {
         case "View Employees by Manager":
           EmployeesByManager();
           break;
-        
+
         case "View Total Budget":
           viewTotalBudget();
           break;
@@ -85,8 +95,11 @@ const start = () => {
     });
 };
 
+// Use the .execute() method to execute SQL queries selecting all departments.
+// async/await statement to handle asynchronous functions
 const viewAllDepartments = async () => {
   console.log("Selecting all departments...\n");
+  // try...catch statement to handle errors
   try {
     const [rows, fields] = await db.execute("SELECT * FROM department");
     console.table(rows);
@@ -96,6 +109,7 @@ const viewAllDepartments = async () => {
   }
 };
 
+// Use the .execute() method to execute SQL queries Selecting all roles.
 const viewAllRoles = async () => {
   console.log("Selecting all roles...\n");
   try {
@@ -107,6 +121,7 @@ const viewAllRoles = async () => {
   }
 };
 
+// see above for comments for this function and the one below
 const viewAllEmployees = async () => {
   console.log("Selecting all employees...\n");
   try {
@@ -137,8 +152,10 @@ const addDepartment = async () => {
   }
 };
 
+// Use the .execute() method to execute SQL queries inserting a new role.
 const addRole = async () => {
   console.log("Adding a role...\n");
+  // Use the .prompt() method to prompt the user for the new role's title, salary, and department id.
   const role = await inquirer.prompt([
     {
       name: "title",
@@ -168,6 +185,7 @@ const addRole = async () => {
   }
 };
 
+// similar to the addRole function above
 const addEmployee = async () => {
   console.log("Adding an employee...\n");
   const employee = await inquirer.prompt([
@@ -191,7 +209,6 @@ const addEmployee = async () => {
       type: "number",
       message: "What is the manager id of the employee?",
     },
-    
   ]);
   try {
     const [rows, fields] = await db.execute(
@@ -210,6 +227,7 @@ const addEmployee = async () => {
   }
 };
 
+// similar to the addRole function above
 const updateEmployeeRole = async () => {
   console.log("Updating an employee role...\n");
   const employee = await inquirer.prompt([
@@ -236,6 +254,7 @@ const updateEmployeeRole = async () => {
   }
 };
 
+//View employees by manager, similar to the addRole function above
 const EmployeesByManager = async () => {
   console.log("Selecting all employees by manager...\n");
   const employee = await inquirer.prompt([
@@ -258,26 +277,26 @@ const EmployeesByManager = async () => {
 };
 
 //View the total utilized budget of a department—in other words, the combined salaries of all employees in that department.
-    const viewTotalBudget = async () => {  
-      console.log("Viewing total budget...\n");
-      const department = await inquirer.prompt([
-        {
-          name: "department_id",
-          type: "number",
-          message: "What is the department id?",
-        },
-      ]);
-      try {
-        const [rows, fields] = await db.execute(
-          "SELECT SUM(salary) FROM role WHERE department_id = ?",
-          [department.department_id]
-        );
-        console.table(rows);
-        start();
-      } catch (error) {
-        console.error(`Error: ${error.toString()}`);
-      }
-    }
+const viewTotalBudget = async () => {
+  console.log("Viewing total budget...\n");
+  const department = await inquirer.prompt([
+    {
+      name: "department_id",
+      type: "number",
+      message: "What is the department id?",
+    },
+  ]);
+  try {
+    const [rows, fields] = await db.execute(
+      "SELECT SUM(salary) FROM role WHERE department_id = ?",
+      [department.department_id]
+    );
+    console.table(rows);
+    start();
+  } catch (error) {
+    console.error(`Error: ${error.toString()}`);
+  }
+};
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
