@@ -26,7 +26,7 @@ SO THAT I can organize and plan my business
 - Deployed Site:  N/A
 
 ## SCREENSHOTS &&/|| SCREENCASTS:
-Screencast: 
+Screencast: https://drive.google.com/file/d/1v6f_p8cKtFOYSoM4aSdEui4ztyC9vqe5/view
 
 
 ## USAGE && COMMENTS:
@@ -76,6 +76,11 @@ CHoosing the option to update an employee role, prompts user to choose employe I
 THEN a table of employees is shown organized by manager.
 
 Choosing this option shows a list of all employees organized by manager. 
+
+>WHEN I choose a department budget, 
+THEN a sum of all salaries in that department are shown.
+
+Sums correctly shown.
 
 ## FUTURE DIRECTIONS AND CONTRIBUTING
 

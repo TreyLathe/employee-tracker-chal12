@@ -45,6 +45,8 @@ const start = async () => {
         "Add a role",
         "Add an employee",
         "Update an employee role",
+        "View employees by manager", // "View employees by manager",
+        "View department budget",
         "Exit",
       ],
     })
@@ -79,11 +81,11 @@ const start = async () => {
           await updateEmployeeRole();
           break;
 
-        case "View Employees by Manager":
-          await EmployeesByManager();
+        case "View employees by manager":
+          await employeesByManager();
           break;
 
-        case "View Total Budget":
+        case "View department budget":
           await viewTotalBudget();
           break;
 
@@ -256,7 +258,7 @@ const updateEmployeeRole = async () => {
 };
 
 //View employees by manager, similar to the addRole function above
-const EmployeesByManager = async () => {
+const employeesByManager = async () => {
   console.log("Selecting all employees by manager...\n");
   const employee = await inquirer.prompt([
     {
