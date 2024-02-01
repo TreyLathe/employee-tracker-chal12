@@ -30,10 +30,10 @@ mysql
     process.exit(1);
   });
 
-const start = () => {
-  // Use inquirer.prompt() method to prompt the user with a list of options.
-  inquirer
-    .prompt({
+const start = async () => {
+   // Use inquirer.prompt() method to prompt the user with a list of options.
+  try {
+    const answer = await inquirer.prompt({
       name: "action",
       type: "list",
       message: "What would you like to do?",
@@ -48,51 +48,52 @@ const start = () => {
         "Exit",
       ],
     })
-    // .then method to handle the promise returned from inquirer.prompt()
-    .then((answer) => {
+    
       // Use a switch statement to call the appropriate function depending on what the user chooses.
       switch (answer.action) {
         case "View all departments":
-          viewAllDepartments();
+          await viewAllDepartments();
           break;
 
         case "View all roles":
-          viewAllRoles();
+          await viewAllRoles();
           break;
 
         case "View all employees":
-          viewAllEmployees();
+          await viewAllEmployees();
           break;
 
         case "Add a department":
-          addDepartment();
+          await addDepartment();
           break;
 
         case "Add a role":
-          addRole();
+          await addRole();
           break;
 
         case "Add an employee":
-          addEmployee();
+          await addEmployee();
           break;
 
         case "Update an employee role":
-          updateEmployeeRole();
+          await updateEmployeeRole();
           break;
 
         case "View Employees by Manager":
-          EmployeesByManager();
+          await EmployeesByManager();
           break;
 
         case "View Total Budget":
-          viewTotalBudget();
+          await viewTotalBudget();
           break;
 
         case "Exit":
           db.end();
           break;
       }
-    });
+    } catch (error) {
+      console.error(`Error: ${error.toString()}`);
+    }
 };
 
 // Use the .execute() method to execute SQL queries selecting all departments.

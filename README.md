@@ -81,7 +81,7 @@ Choosing this option shows a list of all employees organized by manager.
 
 - Add more functionality   
     - add more functionality to list data in various manners
-    - add more functionality to modify datat
+    - add more functionality to modify data
     - add web interface functionality 
 - JEST test code
     
